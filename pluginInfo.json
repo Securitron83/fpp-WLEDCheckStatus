@@ -1,0 +1,11 @@
+{
+    "name": "fpp-WLEDCheckStatus",
+    "description": "Check WLED device power state from FPP command presets. Turns on devices that are off or stuck in a bad live-mode state before a show starts.",
+    "author": "Securitron83",
+    "version": "1.0.0",
+    "minFPPVersion": "6.0",
+    "maxFPPVersion": "",
+    "srcURL": "https://github.com/Securitron83/fpp-WLEDCheckStatus.git",
+    "homeURL": "https://github.com/Securitron83/fpp-WLEDCheckStatus",
+    "bugURL": "https://github.com/Securitron83/fpp-WLEDCheckStatus/issues"
+}
