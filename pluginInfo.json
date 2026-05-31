@@ -8,8 +8,8 @@
     "bugURL": "https://github.com/Securitron83/fpp-WLEDCheckStatus/issues",
     "versions": [
         {
-            "minFPPVersion": "6.0",
-            "maxFPPVersion": "",
+            "minFPPVersion": "9.0",
+            "maxFPPVersion": "0",
             "branch": "master",
             "sha": "49166981aab19796cbe510cf8bd7e03d90e1a203"
         }
