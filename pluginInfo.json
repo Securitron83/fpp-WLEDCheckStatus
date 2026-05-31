@@ -11,7 +11,15 @@
             "minFPPVersion": "9.0",
             "maxFPPVersion": "0",
             "branch": "master",
-            "sha": "49166981aab19796cbe510cf8bd7e03d90e1a203"
+            "sha": "",
+            "allowUpdates": 1
+        }
+    ],
+    "menuItems": [
+        {
+            "title": "WLED Check Status",
+            "page": "content.php",
+            "type": "content"
         }
     ]
 }
