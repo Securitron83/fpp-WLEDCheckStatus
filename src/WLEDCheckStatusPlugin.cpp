@@ -132,7 +132,7 @@ public:
 
         std::string resp = httpGet(url);
         if (resp.empty()) {
-            LogWarn(VB_PLUGIN, "WLEDCheckStatus: no response from %s\n", ip.c_str());
+            LogWarn(VB_GENERAL, "WLEDCheckStatus: no response from %s\n", ip.c_str());
             return "No response from " + ip;
         }
 
@@ -141,7 +141,7 @@ public:
         std::string errs;
         std::istringstream ss(resp);
         if (!Json::parseFromStream(builder, ss, &root, &errs)) {
-            LogWarn(VB_PLUGIN, "WLEDCheckStatus: invalid JSON from %s\n", ip.c_str());
+            LogWarn(VB_GENERAL, "WLEDCheckStatus: invalid JSON from %s\n", ip.c_str());
             return "Invalid JSON from " + ip;
         }
 
@@ -151,19 +151,19 @@ public:
 
         // Scenario A: receiving live data but power is off — recovery sequence
         if (isLive && !isOn) {
-            LogInfo(VB_PLUGIN, "WLEDCheckStatus: %s LIVE+OFF — recovery sequence\n", ip.c_str());
+            LogInfo(VB_GENERAL, "WLEDCheckStatus: %s LIVE+OFF — running recovery sequence\n", ip.c_str());
             httpPost(url, "{\"live\":false}");
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
             httpPost(url, onPayload(targetBri));
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
             httpPost(url, "{\"live\":true}");
-            LogInfo(VB_PLUGIN, "WLEDCheckStatus: recovery sent to %s\n", ip.c_str());
+            LogInfo(VB_GENERAL, "WLEDCheckStatus: recovery complete for %s\n", ip.c_str());
             return "Recovery sent to " + ip;
         }
 
         // Scenario B: idle and off — just turn on
         if (!isOn) {
-            LogInfo(VB_PLUGIN, "WLEDCheckStatus: %s OFF — sending ON\n", ip.c_str());
+            LogInfo(VB_GENERAL, "WLEDCheckStatus: %s was OFF — turned on\n", ip.c_str());
             httpPost(url, onPayload(targetBri));
             return "Turned on " + ip;
         }
@@ -171,18 +171,18 @@ public:
         // Scenario C: on but brightness is 0 (effectively dark)
         if (curBri == 0) {
             int newBri = targetBri >= 0 ? targetBri : 128;
-            LogInfo(VB_PLUGIN, "WLEDCheckStatus: %s bri=0 — setting to %d\n", ip.c_str(), newBri);
+            LogInfo(VB_GENERAL, "WLEDCheckStatus: %s brightness was 0 — set to %d\n", ip.c_str(), newBri);
             httpPost(url, "{\"bri\":" + std::to_string(newBri) + "}");
             return "Fixed brightness on " + ip;
         }
 
-        LogInfo(VB_PLUGIN, "WLEDCheckStatus: %s OK (on=t live=%s bri=%d)\n",
+        LogInfo(VB_GENERAL, "WLEDCheckStatus: %s OK (on=t live=%s bri=%d)\n",
                 ip.c_str(), isLive ? "t" : "f", curBri);
         return "OK — " + ip + " already on";
     }
 
     bool turnOff(const std::string& ip) {
-        LogInfo(VB_PLUGIN, "WLEDCheckStatus: turning off %s\n", ip.c_str());
+        LogInfo(VB_GENERAL, "WLEDCheckStatus: turning off %s\n", ip.c_str());
         return httpPost("http://" + ip + "/json/state", "{\"on\":false}");
     }
 
